@@ -63,16 +63,15 @@ int main(int argc, char *argv[])
     maze_data->sLast = maze_data->sStart;
     initialize(maze_data, grid, N, M, i1, j1, i2, j2);
     computeShortestPath(maze_data);
-    Node *sGoal = maze_data->sGoal;
 
-    char *aux = malloc(sizeof(char) * 2);
+    /* char *aux = malloc(sizeof(char) * 2); */
 
-    while (compCoords(maze_data->sStart, sGoal))
+    while (compCoords(maze_data->sStart, maze_data->sGoal))
     {
 
-        fgets(aux, 2, stdin);
+        /* fgets(aux, 2, stdin);
 
-        print_maze(maze_data);
+        print_maze(maze_data); */
         Node *min = getMinNeighbor(maze_data->sStart, maze_data);
 
         updateWeight(min, maze_data);
