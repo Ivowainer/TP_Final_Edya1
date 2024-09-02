@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "general.h": "c",
+        "limits": "cpp",
+        "dstar_lite.h": "c",
+        "bheap.h": "c",
+        "stdlib.h": "c",
+        "node.h": "c"
+    }
+}
