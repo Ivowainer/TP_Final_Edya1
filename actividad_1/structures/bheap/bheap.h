@@ -9,7 +9,7 @@
 typedef struct
 {
     Node *node;
-    int key[2];
+    int *key;
 } BHeapNode;
 
 typedef struct
@@ -31,5 +31,7 @@ int search_bheap(BHeap *heap, Node *node);
 
 int compareKeys(int *a, int *b);
 void print_bheap(BHeap *heap);
+
+void destroy_bheap(BHeap *heap);
 
 #endif

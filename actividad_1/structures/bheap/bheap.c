@@ -126,6 +126,14 @@ int compareKeys(int *a, int *b)
     return a[1] - b[1];
 }
 
+void destroy_bheap(BHeap *heap)
+{
+    for (int i = 0; i < heap->size; i++)
+        free(heap->nodes[i].key);
+    free(heap->nodes);
+    free(heap);
+}
+
 void print_bheap(BHeap *heap)
 {
     for (int i = 0; i < heap->size; i++)

@@ -10,6 +10,7 @@
 #include <string.h>
 
 Grid read_file(int *N, int *M, int *D, int *i1, int *j1, int *i2, int *j2, char *file_name);
+void free_all(MazeData *mazeData, Grid grid, clist *list);
 
 void print_maze(MazeData *mazeData)
 {
@@ -64,14 +65,13 @@ int main(int argc, char *argv[])
     initialize(maze_data, grid, N, M, i1, j1, i2, j2);
     computeShortestPath(maze_data);
 
-    /* char *aux = malloc(sizeof(char) * 2); */
+    char *aux = malloc(sizeof(char) * 2);
 
     while (compCoords(maze_data->sStart, maze_data->sGoal))
     {
+        fgets(aux, 2, stdin);
+        print_maze(maze_data);
 
-        /* fgets(aux, 2, stdin);
-
-        print_maze(maze_data); */
         Node *min = getMinNeighbor(maze_data->sStart, maze_data);
 
         updateWeight(min, maze_data);
@@ -91,8 +91,26 @@ int main(int argc, char *argv[])
     }
 
     clist_print(list);
+    free_all(maze_data, grid, list);
 
     return 0;
+}
+
+void free_all(MazeData *mazeData, Grid grid, clist *list)
+{
+    for (int i = 0; i < mazeData->N; i++)
+    {
+        free(mazeData->maze[i]->neighborgs);
+        free(mazeData->maze[i]);
+        free(grid[i]);
+    }
+    destroy_bheap(mazeData->bheap);
+    clist_destroy(list);
+    free(mazeData->maze);
+    free(grid);
+    free(mazeData);
+
+    return;
 }
 
 Grid read_file(int *N, int *M, int *D, int *i1, int *j1, int *i2, int *j2, char *file_name)
@@ -145,9 +163,6 @@ Grid read_file(int *N, int *M, int *D, int *i1, int *j1, int *i2, int *j2, char 
             return NULL;
         }
     }
-
-    /* for (int i = 0; i < *N; i++)
-        fscanf(file, "%s", grid[i]); */
 
     fclose(file);
 

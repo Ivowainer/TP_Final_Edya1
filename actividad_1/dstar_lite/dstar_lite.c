@@ -32,7 +32,7 @@ static Coord directions_versor(int d)
     return vd;
 }
 
-static int *calculate_key(Node *node, MazeData *mazeData)
+int *calculate_key(Node *node, MazeData *mazeData)
 {
     int *key = malloc(sizeof(int) * 2);
     key[0] = fmin(node->g, node->rhs) + h(mazeData->sStart, node) + mazeData->km;
@@ -285,6 +285,7 @@ void computeShortestPath(MazeData *mazeData)
                 if (s != NULL)
                     updateVertex(s, mazeData);
             }
+            free(keys_u);
         }
         else
         {
@@ -297,6 +298,7 @@ void computeShortestPath(MazeData *mazeData)
                     updateVertex(s, mazeData);
             }
             updateVertex(u, mazeData);
+            free(keys_u);
         }
     }
 }
