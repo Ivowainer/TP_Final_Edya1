@@ -43,7 +43,7 @@ void clist_print(clist *list)
     clistNode *node = list->head;
     while (node != NULL)
     {
-        printf("%s", node->data);
+        printf("%c", *node->data);
         node = node->next;
     }
 }

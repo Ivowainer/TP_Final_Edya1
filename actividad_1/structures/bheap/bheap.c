@@ -8,23 +8,19 @@ static void swap_nodes(BHeap *heap, int i, int j)
     heap->nodes[j] = temp;
 }
 
-// Ajusta el nodo hacia arriba en el montículo
-static void bheap_float(BHeap *heap, int index)
+void bheap_float(BHeap *heap, int index)
 {
     while (index > 0)
     {
         int parent = (index - 1) / 2;
         if (compareKeys(heap->nodes[index].key, heap->nodes[parent].key) >= 0)
-        {
             break;
-        }
         swap_nodes(heap, index, parent);
         index = parent;
     }
 }
 
-// Ajusta el nodo hacia abajo en el montículo
-static void bheap_sink(BHeap *heap, int index)
+void bheap_sink(BHeap *heap, int index)
 {
     int size = heap->size;
     while (2 * index + 1 < size)
@@ -32,13 +28,9 @@ static void bheap_sink(BHeap *heap, int index)
         int child = 2 * index + 1;
         int right = 2 * index + 2;
         if (right < size && compareKeys(heap->nodes[right].key, heap->nodes[child].key) < 0)
-        {
             child = right;
-        }
         if (compareKeys(heap->nodes[index].key, heap->nodes[child].key) <= 0)
-        {
             break;
-        }
         swap_nodes(heap, index, child);
         index = child;
     }
@@ -46,8 +38,8 @@ static void bheap_sink(BHeap *heap, int index)
 
 BHeap *create_bheap(int capacity)
 {
-    BHeap *heap = (BHeap *)malloc(sizeof(BHeap));
-    heap->nodes = (BHeapNode *)malloc(sizeof(BHeapNode) * capacity);
+    BHeap *heap = malloc(sizeof(BHeap));
+    heap->nodes = malloc(sizeof(BHeapNode) * capacity);
     heap->size = 0;
     heap->capacity = capacity;
     return heap;
@@ -57,14 +49,13 @@ void enqueue_bheap(BHeap *heap, Node *node, int *keys)
 {
     if (heap->size == heap->capacity)
     {
-        // Opcional: Duplicar la capacidad o manejar el error
-        return;
+        heap->nodes = realloc(heap->nodes, sizeof(BHeapNode) * heap->capacity * 2);
+        heap->capacity *= 2;
     }
 
     BHeapNode new_node;
     new_node.node = node;
-    new_node.key[0] = keys[0];
-    new_node.key[1] = keys[1];
+    new_node.key = keys;
 
     heap->nodes[heap->size] = new_node;
     bheap_float(heap, heap->size);
@@ -74,19 +65,20 @@ void enqueue_bheap(BHeap *heap, Node *node, int *keys)
 int *topKey_bheap(BHeap *heap)
 {
     if (heap->size == 0)
-    {
         return NULL;
-    }
-    return heap->nodes[0].key;
+
+    int *keys = malloc(sizeof(int) * 2);
+    keys[0] = heap->nodes[0].key[0];
+    keys[1] = heap->nodes[0].key[1];
+    return keys;
 }
 
 Node *dequeue_bheap(BHeap *heap)
 {
     if (heap->size == 0)
-    {
         return NULL;
-    }
     Node *node = heap->nodes[0].node;
+    free(heap->nodes[0].key);
     heap->nodes[0] = heap->nodes[--heap->size];
     bheap_sink(heap, 0);
     return node;
@@ -107,22 +99,21 @@ int search_bheap(BHeap *heap, Node *node)
 void remove_bheap(BHeap *heap, Node *node)
 {
     int index = search_bheap(heap, node);
+    BHeapNode temp = heap->nodes[index];
     if (index == -1)
-    {
         return;
-    }
+
     swap_nodes(heap, index, heap->size - 1);
     heap->size--;
     bheap_sink(heap, index);
     bheap_float(heap, index);
+    free(temp.key);
 }
 
 int compareKeys(int *a, int *b)
 {
     if (a[0] != b[0])
-    {
         return a[0] - b[0];
-    }
     return a[1] - b[1];
 }
 

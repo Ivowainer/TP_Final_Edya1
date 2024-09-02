@@ -65,12 +65,12 @@ int main(int argc, char *argv[])
     initialize(maze_data, grid, N, M, i1, j1, i2, j2);
     computeShortestPath(maze_data);
 
-    char *aux = malloc(sizeof(char) * 2);
+    /* char *aux = malloc(sizeof(char) * 2); */
 
     while (compCoords(maze_data->sStart, maze_data->sGoal))
     {
-        fgets(aux, 2, stdin);
-        print_maze(maze_data);
+        /* fgets(aux, 2, stdin);
+        print_maze(maze_data); */
 
         Node *min = getMinNeighbor(maze_data->sStart, maze_data);
 
@@ -100,7 +100,8 @@ void free_all(MazeData *mazeData, Grid grid, clist *list)
 {
     for (int i = 0; i < mazeData->N; i++)
     {
-        free(mazeData->maze[i]->neighborgs);
+        for (int j = 0; j < mazeData->M; j++)
+            free(mazeData->maze[i][j].neighborgs);
         free(mazeData->maze[i]);
         free(grid[i]);
     }
@@ -109,8 +110,6 @@ void free_all(MazeData *mazeData, Grid grid, clist *list)
     free(mazeData->maze);
     free(grid);
     free(mazeData);
-
-    return;
 }
 
 Grid read_file(int *N, int *M, int *D, int *i1, int *j1, int *i2, int *j2, char *file_name)
@@ -155,13 +154,14 @@ Grid read_file(int *N, int *M, int *D, int *i1, int *j1, int *i2, int *j2, char 
 
     for (int i = 0; i < *N; i++)
     {
-        grid[i] = malloc(sizeof(char) * (*M));
-        if (fscanf(file, "%s", grid[i]) == EOF || strlen(grid[i]) != *M)
+        grid[i] = malloc(sizeof(char) * ((*M) + 1));
+        fscanf(file, "%s", grid[i]);
+        /* if (fscanf(file, "%s", grid[i]) == EOF || strlen(grid[i]) != *M)
         {
             fclose(file);
             printf("Error al leer fila del laberinto\n");
             return NULL;
-        }
+        } */
     }
 
     fclose(file);

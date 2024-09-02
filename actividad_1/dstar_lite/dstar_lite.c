@@ -122,7 +122,7 @@ static Node *get_neighbor(Node *u, int direction, MazeData *mazeData)
     if (ni >= 0 && ni < mazeData->N && nj >= 0 && nj < mazeData->M)
         return &mazeData->maze[ni][nj]; // Devolver la direccion del vecino
 
-    return NULL; // Fuera de los limites del tablero
+    return NULL; // Fuera del del tablero
 }
 
 int compCoords(Node *a, Node *b)
@@ -219,9 +219,7 @@ void initialize(MazeData *mazeData, Grid grid, int N, int M, int i1, int j1, int
 int isObstacle(Node *u, MazeData *mazeData)
 {
     if (mazeData->grid[u->coord.i][u->coord.j] == '#')
-    {
         return 1;
-    }
     return 0;
 }
 
@@ -254,18 +252,26 @@ void updateWeight(Node *u, MazeData *mazeData)
                 mazeData->maze[u->coord.i][u->coord.j].isObstacle = 1;
             }
             else
-            {
                 v->neighborgs[a] = 1;
-            }
 
             updateVertex(v, mazeData);
         }
     }
 }
 
+int compare(MazeData *mazeData, int *s)
+{
+    int *top = topKey_bheap(mazeData->bheap);
+    int result = compareKeys(top, s) < 0;
+
+    free(top);
+    return result;
+}
+
 void computeShortestPath(MazeData *mazeData)
 {
-    while (mazeData->bheap->size > 0 && ((compareKeys(topKey_bheap(mazeData->bheap), calculate_key(mazeData->sStart, mazeData)) < 0) || mazeData->sStart->rhs != mazeData->sStart->g))
+    int *s = calculate_key(mazeData->sStart, mazeData);
+    while (mazeData->bheap->size > 0 && (compare(mazeData, s) || mazeData->sStart->rhs != mazeData->sStart->g))
     {
         int *k_old = topKey_bheap(mazeData->bheap);
         Node *u = dequeue_bheap(mazeData->bheap);
@@ -274,7 +280,6 @@ void computeShortestPath(MazeData *mazeData)
 
         if (compareKeys(k_old, keys_u) < 0)
             enqueue_bheap(mazeData->bheap, u, keys_u);
-
         else if (u->g > u->rhs)
         {
             u->g = u->rhs;
@@ -300,5 +305,8 @@ void computeShortestPath(MazeData *mazeData)
             updateVertex(u, mazeData);
             free(keys_u);
         }
+        free(k_old);
     }
+
+    free(s);
 }
