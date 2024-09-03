@@ -163,7 +163,7 @@ Node *getMinNeighbor(Node *u, MazeData *mazeData)
 int getCost(Node *u, Node *s, MazeData *mazeData)
 {
     int direction = getDirection(u, s);
-    return u->neighborgs[direction];
+    return u->neighbors[direction];
 }
 
 void initialize(MazeData *mazeData, Grid grid, int N, int M, int i1, int j1, int i2, int j2)
@@ -180,21 +180,21 @@ void initialize(MazeData *mazeData, Grid grid, int N, int M, int i1, int j1, int
     {
         for (int j = 0; j < M; j++)
         {
-            maze[i][j].neighborgs = malloc(sizeof(int) * 4);
+            maze[i][j].neighbors = malloc(sizeof(int) * 4);
 
-            maze[i][j].neighborgs[0] = 2;
-            maze[i][j].neighborgs[1] = 2;
-            maze[i][j].neighborgs[2] = 2;
-            maze[i][j].neighborgs[3] = 2;
+            maze[i][j].neighbors[0] = UNKNOWN_WEIGHT;
+            maze[i][j].neighbors[1] = UNKNOWN_WEIGHT;
+            maze[i][j].neighbors[2] = UNKNOWN_WEIGHT;
+            maze[i][j].neighbors[3] = UNKNOWN_WEIGHT;
 
             if (j == 0)
-                maze[i][j].neighborgs[2] = INFINITY_U;
+                maze[i][j].neighbors[2] = INFINITY_U;
             else if (j == M - 1)
-                maze[i][j].neighborgs[3] = INFINITY_U;
+                maze[i][j].neighbors[3] = INFINITY_U;
             if (i == 0)
-                maze[i][j].neighborgs[0] = INFINITY_U;
+                maze[i][j].neighbors[0] = INFINITY_U;
             else if (i == N - 1)
-                maze[i][j].neighborgs[1] = INFINITY_U;
+                maze[i][j].neighbors[1] = INFINITY_U;
 
             maze[i][j].coord.i = i;
             maze[i][j].coord.j = j;
@@ -248,11 +248,11 @@ void updateWeight(Node *u, MazeData *mazeData)
             int a = getDirection(v, u);
             if (isObstacle(u, mazeData))
             {
-                v->neighborgs[a] = INFINITY_U;
+                v->neighbors[a] = INFINITY_U;
                 mazeData->maze[u->coord.i][u->coord.j].isObstacle = 1;
             }
             else
-                v->neighborgs[a] = 1;
+                v->neighbors[a] = 1;
 
             updateVertex(v, mazeData);
         }

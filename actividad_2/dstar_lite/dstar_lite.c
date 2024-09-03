@@ -135,7 +135,7 @@ Node *getMinNeighbor(Node *u, MazeData *mazeData)
 int getCost(Node *u, Node *s, MazeData *mazeData)
 {
     int direction = getDirection(u, s);
-    return u->neighborgs[direction];
+    return u->neighbors[direction];
 }
 
 void initialize(MazeData *mazeData, int N, int M, int i1, int j1, int i2, int j2)
@@ -152,21 +152,21 @@ void initialize(MazeData *mazeData, int N, int M, int i1, int j1, int i2, int j2
     {
         for (int j = 0; j < M; j++)
         {
-            maze[i][j].neighborgs = malloc(sizeof(int) * 4);
+            maze[i][j].neighbors = malloc(sizeof(int) * 4);
 
-            maze[i][j].neighborgs[0] = UNKNOWN_WEIGHT;
-            maze[i][j].neighborgs[1] = UNKNOWN_WEIGHT;
-            maze[i][j].neighborgs[2] = UNKNOWN_WEIGHT;
-            maze[i][j].neighborgs[3] = UNKNOWN_WEIGHT;
+            maze[i][j].neighbors[0] = UNKNOWN_WEIGHT;
+            maze[i][j].neighbors[1] = UNKNOWN_WEIGHT;
+            maze[i][j].neighbors[2] = UNKNOWN_WEIGHT;
+            maze[i][j].neighbors[3] = UNKNOWN_WEIGHT;
 
             if (j == 0)
-                maze[i][j].neighborgs[2] = INFINITY_U;
+                maze[i][j].neighbors[2] = INFINITY_U;
             else if (j == M - 1)
-                maze[i][j].neighborgs[3] = INFINITY_U;
+                maze[i][j].neighbors[3] = INFINITY_U;
             if (i == 0)
-                maze[i][j].neighborgs[0] = INFINITY_U;
+                maze[i][j].neighbors[0] = INFINITY_U;
             else if (i == N - 1)
-                maze[i][j].neighborgs[1] = INFINITY_U;
+                maze[i][j].neighbors[1] = INFINITY_U;
 
             maze[i][j].coord.i = i;
             maze[i][j].coord.j = j;
@@ -219,10 +219,10 @@ void updateWeights(Node *sStart, int *distances, MazeData *mazeData, int D)
                     {
                         int a = getDirection(neighbor_of_neighbor, neighbor);
                         if (i < distances[d])
-                            neighbor_of_neighbor->neighborgs[a] = 1;
+                            neighbor_of_neighbor->neighbors[a] = 1;
                         else
                         {
-                            neighbor_of_neighbor->neighborgs[a] = INFINITY_U;
+                            neighbor_of_neighbor->neighbors[a] = INFINITY_U;
                             mazeData->maze[neighbor->coord.i][neighbor->coord.j].isObstacle = 1;
                         }
                         updateVertex(neighbor_of_neighbor, mazeData);

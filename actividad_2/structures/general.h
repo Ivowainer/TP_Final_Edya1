@@ -8,8 +8,6 @@
 #define INFINITY_U __INT16_MAX__
 #define UNKNOWN_WEIGHT 100
 
-typedef char **Grid;
-
 typedef Node **Maze;
 
 typedef struct

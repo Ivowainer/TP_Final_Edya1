@@ -12,8 +12,8 @@ typedef struct
     Coord coord;
     int g;
     int rhs;
-    int isObstacle;  // 1: si, 0: no
-    int *neighborgs; // ARRIBA, ABAJO, IZQUIERDA y DERECHA
+    int isObstacle; // 1: si, 0: no
+    int *neighbors; // ARRIBA, ABAJO, IZQUIERDA y DERECHA
 } Node;
 
 void *copy_node(void *);

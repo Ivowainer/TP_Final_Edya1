@@ -73,7 +73,7 @@ void free_all(MazeData *mazeData, clist *list)
     for (int i = 0; i < mazeData->N; i++)
     {
         for (int j = 0; j < mazeData->M; j++)
-            free(mazeData->maze[i][j].neighborgs);
+            free(mazeData->maze[i][j].neighbors);
         free(mazeData->maze[i]);
     }
     destroy_bheap(mazeData->bheap);

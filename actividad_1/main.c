@@ -65,14 +65,9 @@ int main(int argc, char *argv[])
     initialize(maze_data, grid, N, M, i1, j1, i2, j2);
     computeShortestPath(maze_data);
 
-    char *aux = malloc(sizeof(char) * 2);
-
     while (compCoords(maze_data->sStart, maze_data->sGoal))
     {
         Node *min = getMinNeighbor(maze_data->sStart, maze_data);
-
-        fgets(aux, 2, stdin);
-        print_maze(maze_data);
 
         updateWeight(min, maze_data);
 
@@ -101,7 +96,7 @@ void free_all(MazeData *mazeData, Grid grid, clist *list)
     for (int i = 0; i < mazeData->N; i++)
     {
         for (int j = 0; j < mazeData->M; j++)
-            free(mazeData->maze[i][j].neighborgs);
+            free(mazeData->maze[i][j].neighbors);
         free(mazeData->maze[i]);
         free(grid[i]);
     }
