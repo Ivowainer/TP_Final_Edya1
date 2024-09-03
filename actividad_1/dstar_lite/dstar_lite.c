@@ -116,7 +116,7 @@ static Node *get_neighbor(Node *u, int direction, MazeData *mazeData)
         nj = u->coord.j + 1;
         break;
     default:
-        return NULL; // Dirección no válida
+        return NULL; // Direccion no valida
     }
 
     if (ni >= 0 && ni < mazeData->N && nj >= 0 && nj < mazeData->M)

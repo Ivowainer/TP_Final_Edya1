@@ -8,7 +8,6 @@ static void swap_nodes(BHeap *heap, int i, int j)
     heap->nodes[j] = temp;
 }
 
-// Ajusta el nodo hacia arriba en el montículo
 static void bheap_float(BHeap *heap, int index)
 {
     while (index > 0)
@@ -23,7 +22,6 @@ static void bheap_float(BHeap *heap, int index)
     }
 }
 
-// Ajusta el nodo hacia abajo en el montículo
 static void bheap_sink(BHeap *heap, int index)
 {
     int size = heap->size;
@@ -124,6 +122,14 @@ int compareKeys(int *a, int *b)
         return a[0] - b[0];
     }
     return a[1] - b[1];
+}
+
+void destroy_bheap(BHeap *heap)
+{
+    for (int i = 0; i < heap->size; i++)
+        free(heap->nodes[i].key);
+    free(heap->nodes);
+    free(heap);
 }
 
 void print_bheap(BHeap *heap)

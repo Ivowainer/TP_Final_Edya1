@@ -19,4 +19,6 @@ void updateWeights(Node *sStart, int *distances, MazeData *mazeData, int D);
 int getDirection(Node *u, Node *v);
 char *getDirectionChar(Node *u, Node *v);
 
+void destroy_bheap(BHeap *heap);
+
 #endif

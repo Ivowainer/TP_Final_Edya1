@@ -3,7 +3,6 @@
 #include "./structures/bheap/bheap.h"
 #include "./structures/list/clist.h"
 
-#include "./temp/sensor_temp.h"
 #include "./dstar_lite/dstar_lite.h"
 
 #include <stdio.h>
@@ -17,6 +16,8 @@ int *sensor(Coord a)
     scanf("%d%d%d%d", distances, distances + 1, distances + 2, distances + 3);
     return distances;
 }
+
+void free_all(MazeData *mazeData, clist *list);
 
 int main()
 {
@@ -34,18 +35,17 @@ int main()
     maze_data->sLast = maze_data->sStart;
     initialize(maze_data, N, M, i1, j1, i2, j2);
     computeShortestPath(maze_data);
-    Node *sGoal = maze_data->sGoal;
 
-    int i = 0;
+    /* int i = 0; */
 
-    while (compCoords(maze_data->sStart, sGoal))
+    while (compCoords(maze_data->sStart, maze_data->sGoal))
     {
-        if (i == 100)
+        /* if (i == 100)
         {
             printf("! RRUU\n");
             fflush(stdout);
             return -1;
-        }
+        } */
         Node *min = getMinNeighbor(maze_data->sStart, maze_data);
 
         if (getCost(maze_data->sStart, min, maze_data) > 1)
@@ -71,5 +71,21 @@ int main()
     printf("\n");
     fflush(stdout);
 
+    free_all(maze_data, list);
+
     return 0;
+}
+
+void free_all(MazeData *mazeData, clist *list)
+{
+    for (int i = 0; i < mazeData->N; i++)
+    {
+        for (int j = 0; j < mazeData->M; j++)
+            free(mazeData->maze[i][j].neighborgs);
+        free(mazeData->maze[i]);
+    }
+    destroy_bheap(mazeData->bheap);
+    clist_destroy(list);
+    free(mazeData->maze);
+    free(mazeData);
 }

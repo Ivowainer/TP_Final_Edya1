@@ -94,7 +94,7 @@ static Node *get_neighbor(Node *u, int direction, MazeData *mazeData)
     if (ni >= 0 && ni < mazeData->N && nj >= 0 && nj < mazeData->M)
         return &mazeData->maze[ni][nj]; // Devolver la direccion del vecino
 
-    return NULL; // Fuera de los limites del tablero
+    return NULL; // Fuera del tablero
 }
 
 int compCoords(Node *a, Node *b)
@@ -237,7 +237,8 @@ void updateWeights(Node *sStart, int *distances, MazeData *mazeData, int D)
 void computeShortestPath(MazeData *mazeData)
 {
 
-    while (mazeData->bheap->size > 0 && ((compareKeys(topKey_bheap(mazeData->bheap), calculate_key(mazeData->sStart, mazeData)) < 0) || mazeData->sStart->rhs != mazeData->sStart->g))
+    int *s = calculate_key(mazeData->sStart, mazeData);
+    while (mazeData->bheap->size > 0 && ((compareKeys(topKey_bheap(mazeData->bheap), s) < 0) || mazeData->sStart->rhs != mazeData->sStart->g))
     {
         int *k_old = topKey_bheap(mazeData->bheap);
         Node *u = dequeue_bheap(mazeData->bheap);
