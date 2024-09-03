@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
+#include <string.h>
 
 // leer_archivo()
 // - lee el archivo `data` segun el formato especificado en el trabajo.
@@ -8,49 +9,51 @@
 //   los valores N, M, D, i1, j1, i2 y j2, respectivamente.
 // - Devuelve un arreglo de arreglos con las filas del entorno, o NULL en caso
 //   de que el formato sea invalido
-char **leer_archivo(FILE *data, int *n, int *m, int *max_d, int *i1, int *j1, int *i2, int *j2)
+char **leer_archivo(FILE *data, int *n, int *m, int *max_d, int *i1, int *j1,
+                    int *i2, int *j2)
 {
-  int r1 = fscanf(data, "%d%d%d", n, m, max_d);
-  if (r1 != 3)
-    return NULL;
-  int r2 = fscanf(data, "%d%d", i1, j1);
-  if (r2 != 2)
-    return NULL;
-  int r3 = fscanf(data, "%d%d", i2, j2);
-  if (r3 != 2)
-    return NULL;
-  char **output = malloc(sizeof(char *) * (*n));
-  for (int i = 0; i < (*n); i++)
+  if (data == NULL)
   {
-    output[i] = malloc(sizeof(char) * (*m));
+    return NULL;
   }
-  char c = fgetc(data);
-  int i = 0, j = 0, valid_format = 1;
-  while ((c = fgetc(data)) != EOF && valid_format)
+
+  if (fscanf(data, "%d%d%d", n, m, max_d) != 3)
   {
-    if ((c == '\n' && j != (*m)) || i > (*n) || (c != '.' && c != '#' && c != '\n'))
-    {
-      valid_format = 0;
-    }
-    else if (c == '\n')
-    {
-      i++;
-      j = 0;
-    }
-    else
-      output[i][j++] = c;
+    return NULL;
   }
-  if (j != *n && i == *n - 1)
-    valid_format = 0;
-  if (*i1 < 0 || *i1 >= *n ||
-      *i2 < 0 || *i2 >= *n || *j1 < 0 || *j1 >= *m || *j2 < 0 || *j2 >= *m)
-    valid_format = 0;
-  if (valid_format)
-    return output;
-  for (int i = 0; i < (*n); i++)
-    free(output[i]);
-  free(output);
-  return NULL;
+
+  if (fscanf(data, "%d %d", i1, j1) != 2)
+  {
+    return NULL;
+  }
+
+  if (fscanf(data, "%d %d", i2, j2) != 2)
+  {
+    return NULL;
+  }
+
+  if (*i1 < 0 || *i1 >= *n || *j1 < 0 || *j1 >= *m || *i2 < 0 || *i2 >= *n || *j2 < 0 || *j2 >= *m)
+  {
+    return NULL;
+  }
+
+  fscanf(data, "%d %d %d", n, m, max_d);
+  fscanf(data, "%d %d", i1, j1);
+  fscanf(data, "%d %d", i2, j2);
+
+  char **grid = malloc(sizeof(char *) * (*n));
+
+  for (int i = 0; i < *n; i++)
+  {
+    grid[i] = malloc(sizeof(char) * ((*m) + 1));
+    /* fscanf(data, "%s", grid[i]); */
+    if (fscanf(data, "%s", grid[i]) == EOF || strlen(grid[i]) != *m)
+    {
+      return NULL;
+    }
+  }
+
+  return grid;
 }
 
 // El resto de este archivo no tiene relevancia para el estudiante.

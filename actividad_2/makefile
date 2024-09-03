@@ -1,4 +1,3 @@
-# Variables
 CC = gcc
 CFLAGS = -I./structures -I./dstar_lite
 LDFLAGS = -lm
@@ -8,20 +7,16 @@ DSTAR_DIR = ./dstar_lite
 
 TEMP_DIR = ./temp
 
-# Archivos fuente
 SRC = $(SRC_DIR)/main.c \
 	  $(STRUCTURES_DIR)/bheap/bheap.c \
 	  $(STRUCTURES_DIR)/node/node.c \
 	  $(STRUCTURES_DIR)/list/clist.c \
 	  $(DSTAR_DIR)/dstar_lite.c \
 
-# Archivos objeto
 OBJ = $(SRC:.c=.o)
 
-# Ejecutable
 TARGET = robot
 
-# Reglas
 all: $(TARGET)
 
 $(TARGET): $(OBJ)

@@ -55,8 +55,8 @@ void enqueue_bheap(BHeap *heap, Node *node, int *keys)
 {
     if (heap->size == heap->capacity)
     {
-        // Opcional: Duplicar la capacidad o manejar el error
-        return;
+        heap->capacity *= 2;
+        heap->nodes = (BHeapNode *)realloc(heap->nodes, sizeof(BHeapNode) * heap->capacity);
     }
 
     BHeapNode new_node;
@@ -105,14 +105,23 @@ int search_bheap(BHeap *heap, Node *node)
 void remove_bheap(BHeap *heap, Node *node)
 {
     int index = search_bheap(heap, node);
+    BHeapNode temp = heap->nodes[index];
     if (index == -1)
     {
         return;
     }
+    if (index == heap->size - 1)
+    {
+        free(temp.key);
+        heap->size--;
+        return;
+    }
+
     swap_nodes(heap, index, heap->size - 1);
     heap->size--;
     bheap_sink(heap, index);
     bheap_float(heap, index);
+    free(temp.key);
 }
 
 int compareKeys(int *a, int *b)

@@ -36,16 +36,8 @@ int main()
     initialize(maze_data, N, M, i1, j1, i2, j2);
     computeShortestPath(maze_data);
 
-    /* int i = 0; */
-
     while (compCoords(maze_data->sStart, maze_data->sGoal))
     {
-        /* if (i == 100)
-        {
-            printf("! RRUU\n");
-            fflush(stdout);
-            return -1;
-        } */
         Node *min = getMinNeighbor(maze_data->sStart, maze_data);
 
         if (getCost(maze_data->sStart, min, maze_data) > 1)

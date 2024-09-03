@@ -65,14 +65,14 @@ int main(int argc, char *argv[])
     initialize(maze_data, grid, N, M, i1, j1, i2, j2);
     computeShortestPath(maze_data);
 
-    /* char *aux = malloc(sizeof(char) * 2); */
+    char *aux = malloc(sizeof(char) * 2);
 
     while (compCoords(maze_data->sStart, maze_data->sGoal))
     {
-        /* fgets(aux, 2, stdin);
-        print_maze(maze_data); */
-
         Node *min = getMinNeighbor(maze_data->sStart, maze_data);
+
+        fgets(aux, 2, stdin);
+        print_maze(maze_data);
 
         updateWeight(min, maze_data);
 
@@ -143,7 +143,7 @@ Grid read_file(int *N, int *M, int *D, int *i1, int *j1, int *i2, int *j2, char 
     {
         printf("Error: las posiciones inicial (%d, %d) o final (%d, %d) estan fuera dell laberinto\n", *i1, *j1, *i2, *j2);
         fclose(file);
-        exit(1);
+        return NULL;
     }
 
     fscanf(file, "%d %d %d", N, M, D);
@@ -155,13 +155,13 @@ Grid read_file(int *N, int *M, int *D, int *i1, int *j1, int *i2, int *j2, char 
     for (int i = 0; i < *N; i++)
     {
         grid[i] = malloc(sizeof(char) * ((*M) + 1));
-        fscanf(file, "%s", grid[i]);
-        /* if (fscanf(file, "%s", grid[i]) == EOF || strlen(grid[i]) != *M)
+        /* fscanf(file, "%s", grid[i]); */
+        if (fscanf(file, "%s", grid[i]) == EOF || strlen(grid[i]) != *M)
         {
             fclose(file);
             printf("Error al leer fila del laberinto\n");
             return NULL;
-        } */
+        }
     }
 
     fclose(file);
